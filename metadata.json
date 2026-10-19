@@ -1,6 +1,0 @@
-{
-  "name": "RED SAB Digital",
-  "description": "Red de Soporte Académico para Becados de la Universidad de Piura. Una plataforma de tutoría horizontal y monitoreo predictivo.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}

@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#132850" />
+  <meta name="description" content="Encuesta anónima de dos minutos sobre retos en las prácticas y los primeros años profesionales en ingeniería." />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Encuesta anónima | Retos profesionales en ingeniería</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <script src="js/app.js" defer></script>
+</head>
+<body>
+  <div class="ambient ambient-a" aria-hidden="true"></div>
+  <div class="ambient ambient-b" aria-hidden="true"></div>
+  <header class="topbar">
+    <div class="shell header-inner">
+      <a class="brand" href="index.html" aria-label="Inicio de encuesta de ingeniería">
+        <span class="brand-symbol" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 23.5h22M8 23.5V15l8-6 8 6v8.5M13 23.5v-5h6v5M16 4v4"/><path d="m8 11 8-6 8 6"/></svg>
+        </span>
+        <span><strong>Ingeniería &amp; futuro</strong><small>Encuesta de desarrollo profesional</small></span>
+      </a>
+      <span class="header-chip"><span class="pulse" aria-hidden="true"></span> Participación anónima</span>
+    </div>
+  </header>
+
+  <main class="shell page">
+    <section class="hero" aria-labelledby="page-title">
+      <img class="hero-banner" src="assets/portada-ingenieria.webp" alt="Jóvenes profesionales de ingeniería colaborando y una ingeniera con planos técnicos" width="2508" height="627" fetchpriority="high" />
+      <div class="hero-bottom">
+        <div>
+          <div class="hero-eyebrow"><span class="hero-star">✦</span> TU EXPERIENCIA IMPORTA <span class="hero-sep">/</span> ESTUDIANTES Y JÓVENES INGENIEROS</div>
+          <h1 id="page-title">Tu voz ayuda a construir una mejor formación profesional<span>.</span></h1>
+          <p>Exploramos los retos de comunicación, coordinación y toma de decisiones al comenzar la vida laboral. Comparte tu perspectiva en una encuesta breve.</p>
+          <div class="hero-benefits"><span>⏱️ 2 minutos</span><span>🔒 Sin nombres ni correos</span><span>✨ 4 preguntas</span></div>
+        </div>
+        <div class="hero-emblem" aria-hidden="true"><span>01</span><small>de 03</small><em>ETAPAS</em></div>
+      </div>
+    </section>
+
+    <section class="survey-card" id="surveySection" aria-label="Encuesta anónima">
+      <div class="survey-head">
+        <div class="survey-intro">
+          <span class="kicker">ENCUESTA DE FORMACIÓN COMPLEMENTARIA</span>
+          <h2>Cuéntanos tu perspectiva</h2>
+          <p>Marca las opciones que más se acerquen a tu experiencia. No hay respuestas correctas o incorrectas.</p>
+        </div>
+        <div class="completion-tag" id="completionTag" aria-live="polite">Paso 1 de 3</div>
+      </div>
+
+      <div class="progress" role="progressbar" aria-label="Progreso de la encuesta" aria-valuemin="0" aria-valuemax="100" aria-valuenow="33" id="progressBar"><div id="progressFill"></div></div>
+      <div class="step-names" aria-hidden="true"><span class="is-active" data-step-label="0">01 · Situación actual</span><span data-step-label="1">02 · Retos</span><span data-step-label="2">03 · Prioridad</span></div>
+
+      <form id="surveyForm" novalidate>
+        <!-- Campo invisible antispam. Los usuarios reales no deben rellenarlo. -->
+        <div class="trap" aria-hidden="true"><label for="website">No rellenar este campo</label><input type="text" id="website" name="website" tabindex="-1" autocomplete="off" /></div>
+
+        <section class="survey-step is-current" data-step="0" aria-labelledby="headingStep1">
+          <div class="section-mark"><span class="round-icon" aria-hidden="true">🧭</span><div><span class="micro">PRIMER PASO</span><h3 id="headingStep1">Tu situación actual</h3></div></div>
+          <div class="question-heading"><span class="question-number">01</span><div><h4>¿Cuál describe mejor tu situación actual? <span class="required" title="Obligatorio">*</span></h4><p>Selecciona la opción que mejor refleje tu situación.</p></div></div>
+          <div class="option-list" id="situationOptions" role="radiogroup" aria-label="Situación actual"></div>
+          <div class="revealed-field" id="otherSituationWrap" hidden><label for="otherSituation">Describe brevemente tu situación <span class="required">*</span></label><input id="otherSituation" class="text-field" type="text" maxlength="120" placeholder="Ejemplo: trabajo de manera independiente" autocomplete="off" /></div>
+          <p class="field-error" id="situationError" role="alert" hidden></p>
+        </section>
+
+        <section class="survey-step" data-step="1" aria-labelledby="headingStep2" hidden>
+          <div class="section-mark"><span class="round-icon" aria-hidden="true">🎯</span><div><span class="micro">SEGUNDO PASO</span><h3 id="headingStep2">Retos profesionales</h3></div></div>
+          <div class="question-heading"><span class="question-number">02</span><div><h4>Pensando en tus prácticas preprofesionales o en tus primeros años de trabajo, ¿qué situaciones te parece importante aprender a manejar mejor? <span class="required">*</span></h4><p>Puedes marcar hasta <strong>tres</strong> situaciones. «Ninguna» no puede combinarse con otras opciones.</p></div></div>
+          <div class="selection-bar"><span>Marca las que más te interesan</span><span class="selection-count" id="selectionCount">0 / 3 seleccionadas</span></div>
+          <div class="option-list challenge-list" id="challengeOptions" role="group" aria-label="Situaciones que me gustaría aprender a manejar"></div>
+          <div class="revealed-field" id="otherChallengeWrap" hidden><label for="otherChallenge">Describe esa otra situación <span class="required">*</span></label><input id="otherChallenge" class="text-field" type="text" maxlength="180" placeholder="¿Qué situación te gustaría aprender a manejar?" autocomplete="off" /></div>
+          <p class="field-error" id="challengesError" role="alert" hidden></p>
+        </section>
+
+        <section class="survey-step" data-step="2" aria-labelledby="headingStep3" hidden>
+          <div class="section-mark"><span class="round-icon" aria-hidden="true">💬</span><div><span class="micro">TERCER Y ÚLTIMO PASO</span><h3 id="headingStep3">Tu prioridad y experiencia</h3></div></div>
+          <div class="question-heading"><span class="question-number">03</span><div><h4>De las situaciones que marcaste, ¿cuál te gustaría aprender a manejar primero? <span class="required">*</span></h4><p>Elige una sola. Mostramos únicamente las situaciones que seleccionaste antes.</p></div></div>
+          <div class="option-list priority-options" id="priorityOptions" role="radiogroup" aria-label="Primera situación a aprender"></div>
+          <p class="field-error" id="priorityError" role="alert" hidden></p>
+          <div class="question-separator"></div>
+          <div class="question-heading"><span class="question-number">04</span><div><h4>Piensa en una práctica, proyecto de equipo o situación laboral real —o que anticipes al empezar a trabajar—. ¿Qué conversación o interacción te gustaría manejar mejor?</h4><p>Respuesta <strong>opcional</strong>. Puedes indicar si sería con un supervisor, compañero, cliente o personal de obra y qué necesitarías lograr.</p></div></div>
+          <label class="sr-only" for="freeText">Describe una interacción que te gustaría manejar mejor</label>
+          <textarea id="freeText" class="text-field text-area" maxlength="600" rows="5" placeholder="Ejemplo: Me gustaría aprender a conversar con mi supervisor sobre prioridades cuando recibo varias tareas urgentes…"></textarea>
+          <div class="text-counter"><span>🔐 Evita incluir nombres, correos, teléfonos u otros datos identificables.</span><span id="charCount">0 / 600</span></div>
+        </section>
+
+        <div class="form-footer">
+          <div class="form-actions">
+            <button type="button" class="button button-light" id="backButton" hidden><span aria-hidden="true">←</span> Atrás</button>
+            <button type="button" class="button button-primary" id="nextButton">Continuar <span aria-hidden="true">→</span></button>
+            <button type="submit" class="button button-primary" id="submitButton" hidden><span id="submitButtonLabel">Enviar mi respuesta</span><span aria-hidden="true">✦</span></button>
+          </div>
+          <p class="privacy-note"><span aria-hidden="true">🔒</span> No solicitamos nombres, correos, ubicación ni información del dispositivo. Las respuestas se analizan de forma agrupada.</p>
+          <p class="form-error" id="submissionError" role="alert" hidden></p>
+        </div>
+      </form>
+    </section>
+
+    <section class="success-card" id="successCard" aria-live="polite" hidden>
+      <div class="success-art" aria-hidden="true">✓</div>
+      <div class="success-eyebrow">PARTICIPACIÓN REGISTRADA</div>
+      <h2>¡Gracias por aportar tu perspectiva!</h2>
+      <p>Tu respuesta anónima ayudará a identificar qué habilidades de conversación, coordinación y toma de decisiones merecen mayor atención en la formación de jóvenes ingenieros.</p>
+      <div class="folio-box"><span>Folio aleatorio de esta respuesta</span><strong id="responseFolio">—</strong><small>Este código identifica el envío, no a la persona.</small></div>
+      <button class="button button-light" type="button" id="restartButton">Responder de nuevo <span aria-hidden="true">↗</span></button>
+    </section>
+
+    <footer class="site-footer"><span>© Encuesta académica de ingeniería</span><span>Participación voluntaria · No afecta tus notas</span></footer>
+  </main>
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>
