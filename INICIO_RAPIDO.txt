@@ -1,0 +1,21 @@
+ENCUESTA PROFESIONAL Y ANÓNIMA DE INGENIERÍA - VERSIÓN 2
+=======================================================
+
+ABRIR EL DISEÑO: public/index.html (doble clic)
+ADAPTAR COLORES Y TARJETAS: public/css/styles.css
+CAMBIAR PREGUNTAS: public/index.html + public/js/app.js
+IMAGEN PRINCIPAL: public/assets/portada-ingenieria.webp
+
+PARA QUE GUARDE EN GOOGLE SHEETS:
+1. Pega apps-script/Code.gs en script.google.com
+2. Ejecuta instalarEncuesta y autoriza.
+3. Despliega como Aplicación web (Ejecutar como: Yo; Acceso: Cualquier persona).
+4. Sube TODO el proyecto a GitHub y conéctalo a Netlify.
+5. En Netlify añade SCRIPT_WEB_APP_URL y INGENIERIA_SHARED_SECRET.
+6. Vuelve a desplegar Netlify y prueba con un envío.
+
+Guía detallada: README.md
+
+CONFIDENCIALIDAD: la encuesta no pide nombres, correos o ubicación.
+La hoja privada contiene respuestas y fecha, no identidad del participante.
+Un folio aleatorio identifica cada envío, NO a una persona única.

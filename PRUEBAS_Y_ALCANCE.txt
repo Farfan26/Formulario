@@ -1,0 +1,22 @@
+PRUEBAS REALIZADAS SOBRE ESTA ENTREGA
+====================================
+[OK] Sintaxis JavaScript frontend, backend Netlify y Google Apps Script.
+[OK] Simulación de 3 tamaños: computadora 1440px, tablet 768px, móvil 390px.
+[OK] Sin desplazamiento horizontal en los tres tamaños probados.
+[OK] Primera pregunta presenta exactamente 6 alternativas incluyendo Otra.
+[OK] Segunda pregunta presenta exactamente 10 alternativas incluyendo Ninguna y Otra.
+[OK] Se rechaza la cuarta marca; Ninguna es excluyente.
+[OK] Otra situación requiere texto cuando se selecciona.
+[OK] Pregunta de prioridad solo utiliza las respuestas previamente marcadas.
+[OK] Respuesta abierta opcional y confirmación de envío simulada.
+[OK] Pruebas del puente Netlify: configuración faltante, aceptaciones y rechazos.
+[OK] No hay menciones del nombre personal que se pidió omitir.
+
+PENDIENTE POR EL TITULAR DE LA CUENTA GOOGLE
+===========================================
+[ ] Autorizar e implementar apps-script/Code.gs en la cuenta Google.
+[ ] Configurar URL y secreto privado en el panel de Netlify.
+[ ] Confirmar un envío real contra la hoja de Google Sheets.
+
+La prueba de envío se hizo contra un servidor simulado: no se afirma que
+exista ya una conexión activa a un Google Sheets concreto.

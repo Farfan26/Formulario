@@ -125,6 +125,22 @@ function doPost(e) {
     var tab = ss.getSheetByName("Respuestas");
     if (!tab) throw new Error("No existe la hoja Respuestas.");
 
+    // La caché evita duplicados a corto plazo. La columna I permite
+    // reconocer el mismo envío incluso cuando el participante reintenta
+    // después de que caduque la caché.
+    var existingCount = tab.getLastRow() - 1;
+    if (existingCount > 0) {
+      var previous = tab.getRange(2, 9, existingCount, 1)
+        .createTextFinder(data.requestId)
+        .matchEntireCell(true)
+        .findNext();
+      if (previous) {
+        var previousFolio = String(tab.getRange(previous.getRow(), 1).getValue());
+        cache.put(cacheKey, previousFolio, 600);
+        return responder_({ok: true, folio: previousFolio, duplicado: true});
+      }
+    }
+
     var folio = "ING-" + Utilities.getUuid().slice(0, 8).toUpperCase();
     var retosLimpios = data.challenges.map(redactar_);
     var prioridadLimpia = redactar_(data.priority);
@@ -137,14 +153,15 @@ function doPost(e) {
       textoSeguro_(retosLimpios[1] || ""),
       textoSeguro_(retosLimpios[2] || ""),
       textoSeguro_(prioridadLimpia),
-      textoSeguro_(redactar_(data.comment))
+      textoSeguro_(redactar_(data.comment)),
+      data.requestId // ID aleatorio de este envío; NO de la persona.
     ];
     tab.appendRow(row);
     var lastRow = tab.getLastRow();
     tab.getRange(lastRow, 2).setNumberFormat("dd/mm/yyyy hh:mm");
-    tab.getRange(lastRow, 1, 1, 8).setVerticalAlignment("top");
-    tab.getRange(lastRow, 1, 1, 8).setWrap(true);
-    if (lastRow % 2 === 0) tab.getRange(lastRow, 1, 1, 8).setBackground("#F8F9FE");
+    tab.getRange(lastRow, 1, 1, 9).setVerticalAlignment("top");
+    tab.getRange(lastRow, 1, 1, 9).setWrap(true);
+    if (lastRow % 2 === 0) tab.getRange(lastRow, 1, 1, 9).setBackground("#F8F9FE");
     cache.put(cacheKey, folio, 600);
     return responder_({ ok: true, folio: folio });
 
@@ -199,10 +216,10 @@ function textoSeguro_(s) {
 function configurarHojaRespuestas_(ss) {
   var tab = ss.getSheetByName("Respuestas") || ss.getSheets()[0];
   tab.setName("Respuestas");
-  var headers = ["Folio aleatorio", "Fecha y hora", "Situación actual", "Reto 1", "Reto 2", "Reto 3", "Prioridad", "Comentario opcional"];
+  var headers = ["Folio aleatorio", "Fecha y hora", "Situación actual", "Reto 1", "Reto 2", "Reto 3", "Prioridad", "Comentario opcional", "ID aleatorio del envío (interno)"];
   if (tab.getLastRow() === 0) tab.appendRow(headers);
-  else if (tab.getLastRow() === 1) tab.getRange(1,1,1,8).setValues([headers]);
-  tab.getRange(1,1,1,8).setBackground(COLORS.navy).setFontColor(COLORS.white).setFontWeight("bold").setWrap(true);
+  else tab.getRange(1,1,1,9).setValues([headers]);
+  tab.getRange(1,1,1,9).setBackground(COLORS.navy).setFontColor(COLORS.white).setFontWeight("bold").setWrap(true);
   tab.setFrozenRows(1);
   tab.setRowHeight(1,42);
   tab.setColumnWidth(1,135);
@@ -212,7 +229,8 @@ function configurarHojaRespuestas_(ss) {
   tab.setColumnWidth(7,310);
   tab.setColumnWidth(8,400);
   tab.getRange("B2:B").setNumberFormat("dd/mm/yyyy hh:mm");
-  if (!tab.getFilter()) tab.getRange(1,1,Math.max(2,tab.getLastRow()),8).createFilter();
+  if (!tab.getFilter()) tab.getRange(1,1,tab.getMaxRows(),9).createFilter();
+  tab.hideColumns(9); // ID de envío oculto; no contiene datos personales.
 }
 
 // ============================================================

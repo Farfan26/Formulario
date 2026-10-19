@@ -1,10 +1,11 @@
 {
   "name": "encuesta-anonima-retos-ingenieria",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
   "description": "Encuesta HTML anónima con análisis privado en Google Sheets.",
   "scripts": {
-    "check": "node --check public/js/app.js && node --check netlify/functions/enviar.cjs",
+    "check": "node --check public/js/app.js && node --check netlify/functions/enviar.cjs && node --check < apps-script/Code.gs",
+    "test": "npm run check && node tests/test-backend.cjs",
     "serve": "python3 -m http.server 8000 --directory public"
   }
 }

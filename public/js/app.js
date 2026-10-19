@@ -26,7 +26,8 @@ const CHALLENGES = Object.freeze([
   "Otra situación."
 ]);
 
-const SITUATION_ICONS = ["💼", "🛠️", "⚙️", "📚", "🌱", "✨"];
+const SITUATION_ICONS = ["💼", "🦺", "⚙️", "📘", "🌱", "✨"];
+const CHALLENGE_ICONS = ["🗓️", "📋", "💬", "📣", "🤝", "🌱", "🧭", "🔗", "➖", "✍️"];
 const NONE_INDEX = 8;
 const OTHER_CHALLENGE_INDEX = 9;
 const OTHER_SITUATION_INDEX = 5;
@@ -48,6 +49,8 @@ const steps = [...document.querySelectorAll(".survey-step")];
 function optionElement(text, { name, value, kind, emoji, onChange }) {
   const label = document.createElement("label");
   label.className = "option" + (kind === "checkbox" ? " is-checkbox" : "");
+  if (text === "Ninguna de estas por ahora." || text === "Ninguna por ahora") label.classList.add("option--none");
+  if (text === "Otra situación.") label.classList.add("option--other");
 
   const control = document.createElement("input");
   control.type = kind;
@@ -86,6 +89,7 @@ function renderSituationOptions() {
       emoji: SITUATION_ICONS[index],
       onChange: () => {
         state.situationIndex = index;
+        state.requestId = null;
         $("otherSituationWrap").hidden = index !== OTHER_SITUATION_INDEX;
         $("situationError").hidden = true;
         root.querySelectorAll(".option").forEach((item) => {
@@ -102,7 +106,7 @@ function renderChallenges() {
 
   CHALLENGES.forEach((labelText, index) => {
     root.append(optionElement(labelText, {
-      name: "retos", value: index, kind: "checkbox",
+      name: "retos", value: index, kind: "checkbox", emoji: CHALLENGE_ICONS[index],
       onChange: (input) => {
         if (input.checked) {
           if (index === NONE_INDEX) {
@@ -122,6 +126,7 @@ function renderChallenges() {
           state.challengeIndices.delete(index);
         }
         state.priority = null; // Cambió la selección, hay que elegir prioridad de nuevo.
+        state.requestId = null;
         $("challengesError").hidden = true;
         refreshChallenges();
       }
@@ -164,11 +169,12 @@ function renderPriority() {
     state.priority = choices.length === 1 ? choices[0] : null;
   }
   choices.forEach((choice, i) => {
-    const label = optionElement(choice, {
+    const label = optionElement(choice === "Ninguna de estas por ahora." ? "Ninguna por ahora" : choice, {
       name: "prioridad", value: i, kind: "radio",
-      emoji: i === 0 ? "⭐" : null,
+      emoji: "⭐",
       onChange: () => {
         state.priority = choice;
+        state.requestId = null;
         $("priorityError").hidden = true;
         root.querySelectorAll(".option").forEach((item) => {
           item.classList.toggle("is-selected", item.querySelector("input").checked);
@@ -240,7 +246,9 @@ function setStep(index) {
   $("submissionError").hidden = true;
   if (index === 2) renderPriority();
   $("surveySection").scrollIntoView({ behavior: "smooth", block: "start" });
-  setTimeout(() => $("headingStep" + (index + 1)).setAttribute("tabindex", "-1"), 0);
+  const heading = $("headingStep" + (index + 1));
+  heading.setAttribute("tabindex", "-1");
+  heading.focus({ preventScroll: true });
 }
 
 let toastTimeout;
@@ -275,7 +283,7 @@ async function submitSurvey(event) {
   state.requestId = payload.requestId;
   state.sending = true;
   $("submitButton").disabled = true;
-  $("submitButtonLabel").textContent = "Enviando de forma segura…";
+  $("submitButtonLabel").textContent = "Registrando respuesta…";
   $("submissionError").hidden = true;
 
   try {
@@ -299,7 +307,7 @@ async function submitSurvey(event) {
   } finally {
     state.sending = false;
     $("submitButton").disabled = false;
-    $("submitButtonLabel").textContent = "Enviar mi respuesta";
+    $("submitButtonLabel").textContent = "Enviar respuestas";
   }
 }
 
@@ -317,3 +325,9 @@ $("backButton").addEventListener("click", () => { if (state.step > 0) setStep(st
 $("surveyForm").addEventListener("submit", submitSurvey);
 $("freeText").addEventListener("input", () => { $("charCount").textContent = `${$("freeText").value.length} / 600`; });
 $("restartButton").addEventListener("click", () => { window.location.reload(); });
+
+// Si un participante edita una respuesta después de un fallo, el nuevo
+// contenido corresponde a un envío diferente. El ID anterior no se reutiliza.
+["otherSituation", "otherChallenge", "freeText"].forEach((id) => {
+  $(id).addEventListener("input", () => { state.requestId = null; });
+});

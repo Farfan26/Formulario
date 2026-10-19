@@ -1,154 +1,105 @@
-# 🎓 Encuesta anónima | Retos profesionales en ingeniería
+# ENCUESTA PROFESIONAL Y ANÓNIMA — RETOS DE INGENIERÍA (VERSIÓN 2)
 
-**Proyecto completo HTML + CSS + JavaScript + Netlify Functions + Google Apps Script + Google Sheets**. Incluye la portada ilustrada, encuesta mobile-first y panel de análisis privado.
+Sitio adaptable a PC, tablet y celular; HTML, CSS y JS en archivos separados; portada incluida; envío seguro con Netlify Function, Apps Script y Google Sheets; resumen estadístico privado.
 
-## ✅ Qué hace realmente
-
-- **Es anónima a nivel de las respuestas almacenadas**: no pregunta ni guarda nombre, correo electrónico, ubicación, IP o identificador de dispositivo en Google Sheets. No contiene herramientas de seguimiento web.
-- Recopila las cuatro preguntas originales, reorganizadas en tres pasos.
-- En situación actual y prioridad, selección única. En retos profesionales, **máximo 3** opciones y «Ninguna de estas» excluyente.
-- Cuando alguien pasa a la prioridad, **solamente verá sus alternativas seleccionadas**.
-- Al enviar: confirma el registro en Google Sheets antes de mostrar «Gracias».
-- Genera **un folio aleatorio por respuesta**, no por persona; permite distinguir envíos, no personas. **Una misma persona puede responder varias veces**, ya que no se identifica a los participantes.
-- Crea cuatro pestañas privadas en Sheets: **Respuestas**, **Resumen** (indicadores y gráficos), **Cruces** (situación laboral × retos) y **Comentarios**.
-- Filtra intentos no válidos y elimina patrones básicos de correos, teléfonos y enlaces que se incluyan por error en campos abiertos. No detecta con fiabilidad nombres propios: solicita a los participantes no introducir información identificable.
-
-> **Privacidad:** la web y Google/Netlify pueden conservar registros técnicos normales de infraestructura. Este proyecto no los envía a la hoja de resultados. Los comentarios libres y las combinaciones poco frecuentes podrían revelar indirectamente a una persona si escribe datos identificativos o la muestra es muy pequeña. Limita quién puede ver el Sheet.
-
-## 📁 Archivos incluidos
+## 1. CONTENIDO DEL ZIP
 
 ```text
-Encuesta_Retos_Ingenieria_Anonima/
+Encuesta_Retos_Ingenieria_Profesional_V2/
 ├── public/
-│   ├── index.html                 ← Página de la encuesta
-│   ├── css/styles.css             ← Diseño, responsive y animaciones
-│   ├── js/app.js                  ← Preguntas, validación y envío
+│   ├── index.html                Página principal; preguntas literales
+│   ├── css/styles.css            Paleta, tarjetas, botones, animaciones, responsive
+│   ├── js/app.js                 Validación, navegación y envío
 │   └── assets/
-│       ├── portada-ingenieria.webp ← Portada incluida, 2508×627 px
+│       ├── portada-ingenieria.webp  Portada optimizada 2508 × 627
 │       └── favicon.svg
-├── netlify/functions/enviar.cjs   ← Backend privado de Netlify
-├── apps-script/Code.gs            ← Registro y análisis en Google Sheets
-├── netlify.toml                   ← Configuración de despliegue
-├── package.json                  ← Opcional: pruebas y entorno local
-└── README.md                     ← Esta guía
+├── netlify/functions/enviar.cjs  Puente privado entre HTML y Apps Script
+├── apps-script/Code.gs           Backend Google Sheets + gráficos
+├── netlify.toml                  Configuración de despliegue
+├── package.json                 Comprobación de sintaxis
+├── preview/                      Capturas orientativas en 3 dispositivos
+└── README.md                     Esta guía
 ```
 
-## 🚀 INSTALACIÓN (paso a paso)
+## 2. PREGUNTAS RESPETADAS
 
-### PASO 1 — Configura el Google Apps Script
+Título: **Retos de las prácticas y los primeros años profesionales en ingeniería**.
 
-1. Ve a **https://script.google.com/** e inicia sesión con la cuenta propietaria del Sheets.
-2. Pulsa **Nuevo proyecto** y ponle por nombre `Encuesta Ingeniería - Anónima`.
-3. Abre `Código.gs`, borra el contenido original y pega **todo** `apps-script/Code.gs`.
-4. Guarda el archivo.
-5. En el desplegable de funciones selecciona **`instalarEncuesta`** y pulsa **Ejecutar**.
-6. Autoriza los permisos solicitados de Google Sheets / Apps Script. Si hay una advertencia de aplicación no verificada, continúa **solo si reconoces y confías en este script propio**.
-7. Ve a **Registro de ejecución**. Aparecerán:
-   - `GOOGLE SHEETS: https://docs.google.com/spreadsheets/d/...`
-   - `INGENIERIA_SHARED_SECRET: ...` (**secreto**, no publicarlo)
-8. Abre el enlace de Google Sheets. Verás cuatro pestañas. Déjalo **privado**; no lo publiques ni lo compartas con los participantes.
+Descripción original: "Estoy explorando una propuesta de formación complementaria para estudiantes de últimos ciclos y jóvenes ingenieros. Me interesa conocer qué situaciones de conversación, coordinación y toma de decisiones pueden resultar más retadoras durante las prácticas preprofesionales o al comenzar a trabajar. La encuesta es voluntaria, toma unos dos minutos y no afecta las notas. No solicita datos personales." El texto aparece en dos lugares para una lectura más cómoda.
 
-**IMPORTANTE:** `instalarEncuesta` se puede ejecutar otra vez sin crear otro spreadsheet. Sí rehace los formatos/gráficos de las pestañas de análisis, por lo que no conviene personalizar manualmente esas pestañas antes de volver a ejecutarlo. **No elimina las respuestas existentes**.
+**Pregunta 1 (obligatoria): ¿Cuál describe mejor tu situación actual?** Opciones originales (5 + Otra situación).
 
-### PASO 2 — Publica el Apps Script como Web App
+**Pregunta 2 (obligatoria): Pensando en tus prácticas preprofesionales o en tus primeros años de trabajo, ¿qué situaciones te parece importante aprender a manejar mejor?** Opciones originales (8 + Ninguna de estas por ahora + Otra situación). De una a tres respuestas. La opción «Ninguna» es excluyente.
 
-1. En el editor de Apps Script, elige **Implementar → Nueva implementación**.
-2. Selecciona el tipo **Aplicación web** (ícono de engranaje).
-3. Introduce una descripción, por ejemplo `API de encuestas anónimas`.
-4. Selecciona **Ejecutar como: Yo**.
-5. Selecciona **Quién tiene acceso: Cualquier persona** (no «solo yo»).
-6. Pulsa **Implementar** y copia la URL que termina en **`/exec`**.
-7. Guárdala como `SCRIPT_WEB_APP_URL` para el paso siguiente.
+**Pregunta 3 (obligatoria): De las situaciones que marcaste, ¿cuál te gustaría aprender a manejar primero?** Se visualizan solo las alternativas marcadas en la pregunta anterior. Para «Ninguna de estas por ahora», el botón de prioridad muestra «Ninguna por ahora» y guarda el mismo valor original.
 
-**Nota:** para preservar el anonimato y no obligar a iniciar sesión, el despliegue debe permitir visitantes sin iniciar sesión. Algunas cuentas institucionales de Google Workspace restringen este acceso; prueba la URL en incógnito y revisa las políticas de tu organización si falla.
+**Pregunta 4 (opcional): Piensa en una práctica, proyecto de equipo o situación laboral real —o que anticipes al empezar a trabajar—. ¿Qué conversación o interacción te gustaría manejar mejor?** Campo abierto con la instrucción original y un aviso para evitar datos personales.
 
-### PASO 3 — Publica en Netlify (con funciones)
+**Privacidad:** No se piden nombres ni correos. El sistema registra respuestas, fecha y hora y un folio aleatorio de cada envío. No se intenta identificar a una persona, por lo que **no es posible garantizar una única respuesta por persona**. En campos de texto libre podrían introducirse datos identificables; se intenta eliminar correos, teléfonos y enlaces, pero no puede detectarse todo (por ejemplo, nombres propios). Google y Netlify pueden conservar sus registros de infraestructura. Mantén la hoja privada y protege grupos demasiado pequeños al compartir conclusiones.
 
-La versión HTML se publica en Netlify. La función de Netlify protege la URL de Apps Script y su secreto y permite una **confirmación real** del envío, evitando problemas de CORS.
+## 3. INSTALACIÓN GOOGLE SHEETS
 
-**Método recomendado: conectar GitHub:**
+1. Entra a https://script.google.com/ y crea un proyecto llamado, por ejemplo, `Encuesta de ingeniería`.
+2. Abre `Código.gs`, borra el ejemplo y pega **todo el contenido de `apps-script/Code.gs`**.
+3. Guarda, selecciona `instalarEncuesta` en el desplegable y haz clic en **Ejecutar**.
+4. Autoriza el acceso a tu cuenta de Google: el script necesita crear y escribir su propia hoja de cálculo.
+5. Abre **Registro de ejecución**. Copia de ahí el enlace de Google Sheets y el valor `INGENIERIA_SHARED_SECRET` (es una clave privada, no se comparte con participantes ni se escribe en el JS público).
+6. El Sheet tendrá **Respuestas**, **Resumen**, **Cruces** y **Comentarios**. No lo publiques en internet.
 
-1. Extrae el ZIP en tu PC. **No subas el ZIP completo a la carpeta `public`**.
-2. Crea un repositorio de GitHub y sube **el contenido de esta carpeta del proyecto** (incluidos `netlify.toml`, `public`, `netlify/functions`, pero sin secretos).
-3. En Netlify, selecciona **Add new project / Import an existing project → GitHub** y elige tu repositorio.
-4. `netlify.toml` configura automáticamente:
-   - **Publish directory:** `public`
-   - **Functions directory:** `netlify/functions`
-   - **Build command:** ninguno.
-5. Antes de publicar, entra a **Site configuration / Project configuration → Environment variables** y agrega estas dos variables (para **Functions** o **All scopes**):
+**¿Ya usabas la versión anterior?** El nuevo `Code.gs` sigue empleando las propiedades `SPREADSHEET_ID` e `INGENIERIA_SHARED_SECRET`. Si lo pegas y ejecutas **en el MISMO proyecto de Apps Script anterior**, seguirá apuntando al mismo Sheet; actualiza su despliegue a una nueva versión para que use el nuevo código. Conserva las respuestas previas. No ejecutes `instalarEncuesta` en un proyecto de Apps Script completamente distinto si deseas recuperar el Sheet anterior.
 
-| Variable | Valor |
-| --- | --- |
-| `SCRIPT_WEB_APP_URL` | La URL **/exec** del PASO 2 |
-| `INGENIERIA_SHARED_SECRET` | El secreto de **Registro de ejecución** del PASO 1 |
+## 4. PUBLICAR GOOGLE APPS SCRIPT COMO WEB APP
 
-6. Guarda y despliega. Si añadiste las variables después de publicar, realiza **Trigger deploy / Redeploy** para que la función pueda leerlas.
-7. Abre la URL pública de Netlify; la encuesta aparecerá lista para compartir.
+1. Haz clic en **Implementar → Nueva implementación → Aplicación web**.
+2. En **Ejecutar como**, elige **Yo**.
+3. En **Quién tiene acceso**, elige **Cualquier persona**, si tu institución lo permite. Los estudiantes no necesitarán iniciar sesión.
+4. Pulsa **Implementar** y copia la URL terminada en `/exec`.
+5. Si ya publicaste una versión anterior, ve a **Implementar → Gestionar implementaciones → Editar → Nueva versión** y vuelve a implementar. Puedes conservar el mismo enlace `/exec`.
 
-**Alternativa por terminal Netlify CLI:** desde la raíz del proyecto, usa `npx netlify-cli deploy --build --prod` tras autenticarte y configurar las mismas variables de entorno en Netlify. Si no tienes el CLI, puedes instalarlo siguiendo la documentación oficial.
+Este servicio no muestra los datos del panel a los visitantes. Requiere la clave privada para aceptar registros.
 
-> **No uses solamente “arrastrar y soltar” la carpeta `public`** a Netlify: se cargaría el HTML, pero no la función `enviar.cjs` y no guardaría las respuestas. El despliegue debe incluir Netlify Functions.
+## 5. PUBLICAR EN NETLIFY
 
-### PASO 4 — Prueba que se guarda en Sheets
+**Recomendado: integración GitHub + Netlify**, no solo arrastrar la carpeta `public` (eso no incluiría la función que guarda respuestas).
 
-1. Abre la encuesta pública en modo incógnito (sin sesión de Google).
-2. Selecciona una opción en situación actual.
-3. Marca hasta tres retos (verifica que una cuarta marca sea rechazada).
-4. Selecciona la prioridad entre las alternativas elegidas.
-5. Escribe, si deseas, un comentario de prueba **sin datos personales**.
-6. Haz clic en **Enviar mi respuesta**. Debes ver una pantalla de agradecimiento y un folio con formato `ING-XXXXXXXX`.
-7. Abre la hoja privada **Respuestas**: debe aparecer una nueva fila.
-8. Revisa **Resumen**: los indicadores, gráficos y porcentajes cambian automáticamente.
-9. Revisa **Cruces** para comparar retos según situación laboral y **Comentarios** para leer las respuestas abiertas.
+1. Descomprime el ZIP en tu equipo.
+2. Sube el contenido de la carpeta del proyecto a un repositorio GitHub. Deben quedar en la raíz `netlify.toml`, `public/`, `netlify/functions/` y `apps-script/`.
+3. Entra en https://app.netlify.com/ → **Add new project / Import an existing project** → GitHub → selecciona el repositorio.
+4. Netlify detectará `netlify.toml`: `public` es la carpeta publicada y `netlify/functions` contiene la función.
+5. En **Site configuration → Environment variables** agrega:
+   - `SCRIPT_WEB_APP_URL` = URL del paso 4, terminada en `/exec`.
+   - `INGENIERIA_SHARED_SECRET` = clave privada generada por `instalarEncuesta`.
+6. Guarda esas variables y ejecuta **Deploy / Redeploy**. No agregues estos secretos a archivos HTML, CSS, JS, GitHub ni capturas.
+7. Abre la dirección web pública de Netlify y comparte únicamente esa URL a los participantes.
 
-Si el envío no confirma, **no lo des por recibido**. Revisa Netlify → Functions → Logs y Google Apps Script → Ejecuciones.
+**Advertencia:** la URL y secreto de Apps Script se usan **solo** desde la función `netlify/functions/enviar.cjs`; el navegador no tiene acceso a esas credenciales. Abrir `index.html` sin desplegar sirve para revisar el diseño, pero no guarda en Sheets.
 
-## 📊 Cómo se analizan diferentes respuestas
+## 6. VERIFICACIÓN CON UNA RESPUESTA DE PRUEBA
 
-- **Respuestas:** conserva cada envío con su fecha, folio aleatorio, situación, máximo tres retos, primera prioridad y comentario opcional.
-- **Resumen:** cuenta cuántos envíos hay, qué reto se eligió más, cuál es la prioridad más habitual y cómo se distribuyen las situaciones laborales. Los gráficos son automáticos.
-- **Cruces:** matriz para comparar, por ejemplo, si quienes realizan prácticas necesitan más ayuda con negociación o coordinación.
-- **Comentarios:** reúne las respuestas abiertas en una hoja aparte, sin nombre ni email.
-- **Importante:** se distinguen **envíos individuales**, no **personas únicas**. Anonimato fuerte y control de una sola respuesta por persona no se pueden garantizar simultáneamente sin algún mecanismo identificador.
+1. Abre tu Netlify en incógnito.
+2. **Pregunta 1:** marca una de las seis opciones. «Otra situación» despliega un campo obligatorio si se selecciona.
+3. **Pregunta 2:** marca 1, 2 o 3 retos. Una cuarta opción es rechazada; «Ninguna de estas por ahora» limpia las demás. «Otra situación» pide una explicación.
+4. **Pregunta 3:** se presentan las opciones marcadas; elige una.
+5. **Pregunta 4:** escribe un comentario inventado sin nombres (o déjala en blanco).
+6. Pulsa **Enviar respuestas** y comprueba que aparece `ING-XXXXXXXX`.
+7. En Google Sheets, verifica la nueva fila en **Respuestas** y los indicadores en **Resumen**. Las pestañas **Cruces** y **Comentarios** facilitan comparar diferentes tipos de respuestas.
+8. Si algo falla, revisa **Netlify → Functions → Logs** y **Apps Script → Ejecuciones**. Un fallo de red **no** se muestra como envío confirmado. Reintentar el mismo envío evita duplicados por ID aleatorio.
 
-## 🛠️ ¿Dónde edito cada cosa?
+## 7. ANALÍTICA INCLUIDA
 
-| Qué deseas cambiar | Archivo |
-| --- | --- |
-| Textos, encabezados, descripciones | `public/index.html` |
-| Colores, sombras, tarjetas, animaciones y móviles | `public/css/styles.css` |
-| Alternativas, límite de tres y comportamiento | `public/js/app.js` |
-| Portada | `public/assets/portada-ingenieria.webp` |
-| Validación del servidor y conexión segura | `netlify/functions/enviar.cjs` |
-| Columnas de Sheets y gráficos | `apps-script/Code.gs` |
+- **Respuestas:** fecha, folio aleatorio, situación actual, 1–3 retos, prioridad y comentario.
+- **Resumen:** respuestas recibidas, conteo de selecciones, prioridades y distribución laboral, con dos gráficos.
+- **Cruces:** cuántos estudiantes de cada situación laboral seleccionaron cada reto.
+- **Comentarios:** respuestas abiertas, para revisión privada.
+- **Nota metodológica:** las selecciones totales pueden superar las respuestas porque cada persona puede marcar hasta tres retos. Se analizan **envíos**, no individuos verificados.
 
-**Si cambias opciones:** actualiza en `public/js/app.js`, `netlify/functions/enviar.cjs` y `apps-script/Code.gs` para que los tres componentes acepten los mismos textos. Si ya tienes respuestas, cambiar el texto de las opciones requerirá ajustar el histórico del panel.
+## 8. PERSONALIZACIÓN
 
-## 🔒 Qué medidas de seguridad incluye
+- Imagen de encabezado: reemplaza `public/assets/portada-ingenieria.webp` por otra imagen WEBP en formato horizontal (mantén nombre y relación 4:1 para no tocar el código). Si usas otro nombre, cambia la ruta `src` de `index.html`.
+- Colores, tarjetas, sombras, tipografías, hover y móvil: `public/css/styles.css` → sección `:root` y selectores.
+- Textos visibles y cabeceras: `public/index.html`.
+- Alternativas y reglas de validación: `public/js/app.js`, `netlify/functions/enviar.cjs` y `apps-script/Code.gs`. Deben concordar; no cambies opciones en un solo archivo.
+- Nombres de columnas y análisis: `apps-script/Code.gs`.
+- Ejecuta `npm run check` si tienes Node instalado para comprobar la sintaxis de los scripts JS.
 
-- El secreto se guarda como propiedad de Apps Script y variable de entorno de Netlify; nunca en el frontend.
-- Validación **doble**: el navegador, la función de Netlify y Apps Script validan las respuestas.
-- «Ninguna» es excluyente; no se aceptan más de tres retos, ni prioridades no seleccionadas.
-- Protección básica antispam (campo señuelo), antipérdida por reintento (idempotencia de 10 minutos), longitud máxima de campos y neutralización de entradas que parecen fórmulas de Sheets.
-- El dashboard se consulta en el Google Sheets **privado**, no existe un panel público de comentarios.
-- **Limitación:** esto no es un sistema antibots avanzado ni garantiza un envío único por persona.
-
-## 🧪 Vista previa local
-
-Puedes abrir `public/index.html` para inspeccionar el diseño sin desplegarlo. También puedes iniciar un servidor local:
-
-```bash
-cd public
-python -m http.server 8000
-```
-
-Luego abre `http://localhost:8000`. **El botón Enviar solo guardará en Sheets cuando el proyecto esté publicado con Netlify Functions y las dos variables de entorno estén configuradas.**
-
-## ⚠️ Aviso sobre formularios anteriores
-
-Esta solución es una **página HTML independiente**, no modifica tu Google Form previo ni reutiliza su hoja de respuestas. Crea su propio Google Sheets para llevar el análisis de manera separada.
-
-### Fuentes técnicas oficiales
-- Google Apps Script Web Apps: https://developers.google.com/apps-script/guides/web
-- Netlify Functions: https://docs.netlify.com/build/functions/configuration/
-- Netlify variables de entorno: https://docs.netlify.com/build/functions/environment-variables/
+La solución **no** crea un Google Form: es un formulario HTML profesional que envía sus datos a Google Sheets. No contiene nombres propios de miembros del equipo ni pide identificación de participantes.
